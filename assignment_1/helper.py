@@ -117,12 +117,12 @@ def computeTangentVectorToPolygon(P, q):
     epsilon = 0.00000001
 
     if np.dot(vec_p1p2, vec_p2q) > epsilon:
-        u = 0.01*computeLineThroughTwoPoints(q, p2)[0:2]
+        u = computeLineThroughTwoPoints(q, p2)[0:2]
         if isCounterClockwise(vec_p1p2, u) == False:
             u = -1*u
 
     elif np.dot(vec_p1p2, vec_p1q) < -epsilon:
-        u = 0.01*computeLineThroughTwoPoints(q, p1)[0:2]
+        u = computeLineThroughTwoPoints(q, p1)[0:2]
         if isCounterClockwise(-1*vec_p1p2, u) == False:
             u = -1*u
 
@@ -156,6 +156,19 @@ def pathPlot(obstaclesList, path):
     plt.show()
     return
 
+def centroid(P):
+    return np.mean(P, axis=0)
+
+
+def angleVec(v, w):
+    v = np.array(v)
+    w = np.array(w)
+    unit_vector_1 = v / np.linalg.norm(v)
+    unit_vector_2 = w/ np.linalg.norm(w)
+    dot_product = np.dot(unit_vector_1, unit_vector_2)
+    angle = np.arccos(dot_product)
+    return angle
+
 
 def moveROS(client, current_position, step_size, u):
     nextDesired = MoveXYGoal()
@@ -170,6 +183,7 @@ def moveROS(client, current_position, step_size, u):
 
     current_position[0] = nextActual.pose_final.x
     current_position[1] = nextActual.pose_final.y
+    print(current_position)
 
     return current_position
 
@@ -195,14 +209,17 @@ def computeBug1(start, goal, obstaclesList, step_size, client):
         P = obstaclesList[np.argmin(dist)]
 
         if np.min(dist) < step_size:
-            bug1_start = current_position
+            bug1_start = current_position.copy()
             bug1_dist = []
             bug1_dist.append(computeDistanceTwoPoints(current_position, goal))
             path.append(current_position)
         
             print("Took first step")
 
-            while (computeDistanceTwoPoints(current_position, bug1_start) > 0.99*step_size or len(bug1_dist) < 2):
+            centre = centroid(P)
+            centre2start = [bug1_start[0]-centre[0], bug1_start[1]-centre[1]] 
+
+            while angleVec([current_position[0]-centre[0], current_position[1]-centre[1]], centre2start) > step_size or len(bug1_dist) < 25:
                 print("Inside circumnav")
                 u = computeTangentVectorToPolygon(P, current_position)
                 current_position = moveROS(client, current_position, step_size, u)

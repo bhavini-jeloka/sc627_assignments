@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import numpy as np
 from helper import *
 from sc627_helper.msg import MoveXYAction, MoveXYGoal, MoveXYResult
