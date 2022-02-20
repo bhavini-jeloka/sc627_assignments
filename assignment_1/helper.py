@@ -194,13 +194,9 @@ def computeBug1(start, goal, obstaclesList, step_size, client):
     current_position = start
     path = [start]
 
-    print("Start bug1")
-
     while computeDistanceTwoPoints(current_position, goal) > step_size:
         dist = np.zeros(len(obstaclesList))
         i = 0
-
-        print("Inside global while loop")
 
         for obstacle in obstaclesList:
             dist[i] = computeDistancePointToPolygon(obstacle, current_position)
@@ -213,20 +209,15 @@ def computeBug1(start, goal, obstaclesList, step_size, client):
             bug1_dist = []
             bug1_dist.append(computeDistanceTwoPoints(current_position, goal))
             path.append(current_position)
-        
-            print("Took first step")
 
             centre = centroid(P)
             centre2start = [bug1_start[0]-centre[0], bug1_start[1]-centre[1]] 
 
             while angleVec([current_position[0]-centre[0], current_position[1]-centre[1]], centre2start) > step_size or len(bug1_dist) < 25:
-                print("Inside circumnav")
                 u = computeTangentVectorToPolygon(P, current_position)
                 current_position = moveROS(client, current_position, step_size, u)
                 path.append(current_position)
                 bug1_dist.append(computeDistanceTwoPoints(current_position, goal))
-            
-            print("Circumnav done")
 
             u = (1 / computeDistanceTwoPoints(current_position, bug1_start)) * \
                                np.array([bug1_start[0] - current_position[0],
@@ -238,7 +229,6 @@ def computeBug1(start, goal, obstaclesList, step_size, client):
             closestGoal = np.argmin(bug1_dist)
 
             for position in range(closestGoal):  # see where you land
-                print("moving to closest obs point")
                 u = computeTangentVectorToPolygon(P, current_position)
                 current_position = moveROS(client, current_position, step_size, u)
                 path.append(current_position)
@@ -253,7 +243,6 @@ def computeBug1(start, goal, obstaclesList, step_size, client):
                 return path
 
         else:
-            print("moving towards goal")
             u =  (1 / computeDistanceTwoPoints(current_position, goal)) * np.array([
                 goal[0] - current_position[0], goal[1] - current_position[1]])
             current_position = moveROS(client, current_position, step_size, u)

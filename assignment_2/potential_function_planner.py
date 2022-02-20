@@ -32,7 +32,7 @@ step_size = read_list[0][2][0]
 read_list.pop(0)
 obstaclesList = read_list
 
-path = computeBug1(start, goal, obstaclesList, step_size, client)
+path = computePotFunc(start, goal, obstaclesList, step_size, client)
 pathPlot(obstaclesList, path)
 
 outFile = open("output_1.txt", "w")
