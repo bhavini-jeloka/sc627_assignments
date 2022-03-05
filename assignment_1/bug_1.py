@@ -32,7 +32,6 @@ step_size = read_list[0][2][0]
 read_list.pop(0)
 obstaclesList = read_list
 
-print("Begine bug1")
 bug_1 = computeBug1(start, goal, obstaclesList, step_size, client)
 path = bug_1[0]
 time = bug_1[1]
@@ -48,6 +47,3 @@ for element2 in time:
 
 pathPlot(obstaclesList, path, start, goal)
 distPlot(path, goal, time)
-
-print("End time:", time[-1])
-

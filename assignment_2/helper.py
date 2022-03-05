@@ -185,9 +185,6 @@ def moveROS(client, current_position, step_size, grad):
     current_position[0] = nextActual.pose_final.x
     current_position[1] = nextActual.pose_final.y
 
-    print(current_position)
-    print(np.linalg.norm(grad))
-
     return current_position, desired_position
 
 
@@ -201,8 +198,6 @@ def computePotFunc(start, goal, obstaclesList, step_size, client, d_star, x, eta
 
     path.append(start[:])
     desired_path.append(start[:])
-
-    print("Start PotFunc")
 
     grad = gradU(current_position, goal, d_star, x, eta, q_i_star, obstaclesList)
 

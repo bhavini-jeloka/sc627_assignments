@@ -165,8 +165,6 @@ def distPlot(path, goal, time):
     for point in path:
         distance2goal.append(computeDistanceTwoPoints(point, goal))
 
-    print(distance2goal)
-
     plt.figure()
     plt.plot(time, distance2goal, '-.')
     plt.xlabel("Time")
@@ -215,8 +213,6 @@ def moveROS(client, current_position, step_size, u):
 
     current_position[0] = nextActual.pose_final.x
     current_position[1] = nextActual.pose_final.y
-    print(current_position)
-    print(nextDesired.pose_dest.theta)
 
     return current_position
 
@@ -243,7 +239,6 @@ def computeBug1(start, goal, obstaclesList, step_size, client):
         P = obstaclesList[np.argmin(dist)]
 
         if np.min(dist) < step_size:
-            print("begin circumnav")
             bug1_start = current_position[:]
             bug1_dist = []
             bug1_point = []
@@ -274,14 +269,10 @@ def computeBug1(start, goal, obstaclesList, step_size, client):
             path.append(current_position[:])
             time_taken.append(time.time()-start_time)
 
-            print("finish circumnav")
-
             closestGoal = bug1_point[np.argmin(bug1_dist)]
 
             centre2closestGoal = [closestGoal[0] -
                                   centre[0], closestGoal[1]-centre[1]]
-
-            print("moving to the closest point")
 
             while angleVec([current_position[0]-centre[0], current_position[1]-centre[1]], centre2closestGoal) > step_size or len(bug1_dist) < 10:
                 u = computeTangentVectorToPolygon(P, current_position)
@@ -292,8 +283,6 @@ def computeBug1(start, goal, obstaclesList, step_size, client):
 
             u = (1 / computeDistanceTwoPoints(current_position, goal)) * np.array([
                 goal[0] - current_position[0], goal[1] - current_position[1]])
-
-            print("moving towards goal")
 
             current_position = moveROS(client, current_position, step_size, u)
             path.append(current_position[:])
