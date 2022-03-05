@@ -40,6 +40,7 @@ flag = 1
 while computeDistanceTwoPoints(current_position, goal) > step_size:
     dist = np.zeros(len(obstaclesList))
     i = 0
+
     for obstacle in obstaclesList:
         dist[i] = computeDistancePointToPolygon(obstacle, current_position)
         i = i+1
@@ -52,12 +53,14 @@ while computeDistanceTwoPoints(current_position, goal) > step_size:
     u = (1/computeDistanceTwoPoints(
         current_position, goal))*np.array([goal[0]-current_position[0], goal[1]-current_position[1]])
     current_position = moveROS(client, current_position, step_size, u)    
-    path.append(current_position)
+    path.append(current_position[:])
 
 if flag:
     path.append(goal)
     print("Success")
     print(path)
+
+pathPlot(obstaclesList, path, start, goal)
 
 outFile = open("output_base.txt", "w")
 for element in path:

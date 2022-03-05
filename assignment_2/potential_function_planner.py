@@ -32,9 +32,15 @@ step_size = read_list[0][2][0]
 read_list.pop(0)
 obstaclesList = read_list
 
-path = computePotFunc(start, goal, obstaclesList, step_size, client)
-pathPlot(obstaclesList, path)
+path, desired_path = computePotFunc(start, goal, obstaclesList, step_size, client, 2, 0.8, 0.8, 2*np.ones(len(obstaclesList)))
 
-outFile = open("output_1.txt", "w")
-for element in path:
-    outFile.write(str(element[0]) + ", " + str(element[1]) + "\n")
+outFile = open("output.txt", "w")
+outFile2 = open("output2.txt", "w")
+
+for i in range(len(path)):
+    outFile.write(str(path[i][0]) + ", " + str(path[i][1]) + "\n")
+    outFile2.write(str(desired_path[i][0]) + ", " + str(desired_path[i][1]) + "\n")
+
+pathPlot(obstaclesList, path, goal, desired_path)
+
+# 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

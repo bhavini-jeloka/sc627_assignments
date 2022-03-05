@@ -5,9 +5,9 @@ from sc627_helper.msg import MoveXYAction, MoveXYGoal, MoveXYResult
 import rospy
 import actionlib
 
-rospy.init_node('test', anonymous= True)
+rospy.init_node('test', anonymous=True)
 
-#Initialize client
+# Initialize client
 client = actionlib.SimpleActionClient('move_xy', MoveXYAction)
 client.wait_for_server()
 
@@ -32,9 +32,22 @@ step_size = read_list[0][2][0]
 read_list.pop(0)
 obstaclesList = read_list
 
-path = computeBug1(start, goal, obstaclesList, step_size, client)
-pathPlot(obstaclesList, path)
+print("Begine bug1")
+bug_1 = computeBug1(start, goal, obstaclesList, step_size, client)
+path = bug_1[0]
+time = bug_1[1]
 
 outFile = open("output_1.txt", "w")
 for element in path:
     outFile.write(str(element[0]) + ", " + str(element[1]) + "\n")
+
+outFile2 = open("output_time.txt", "w")
+for element2 in time:
+    outFile2.write(str(element2) + "\n")
+
+
+pathPlot(obstaclesList, path, start, goal)
+distPlot(path, goal, time)
+
+print("End time:", time[-1])
+
