@@ -106,6 +106,7 @@ class Coordination:
         # print(data)
 
     def BalanceBot(self):
+        pseudo_iter = 0
         while not rospy.is_shutdown():  # replace with balancing reached?
 
             # get odom data, left_odom and right_odom
@@ -132,7 +133,6 @@ class Coordination:
             self.pub_vel.publish(vel_msg)
             self.r.sleep()
 
-            pseudo_iter = 0
             if abs(self.v)<self.epsilon and abs(self.v_left)<self.epsilon and abs(self.v_right)<self.epsilon and pseudo_iter>self.psuedo_max_iter:
                 break
 
@@ -152,6 +152,7 @@ if __name__ == '__main__':
     ax1.set_xlabel('x-axis')
     ax1.set_title('Path taken by the robot')
     ax1.grid()
+    plt.show()
 
     fig2, ax2 = plt.subplots(1, 1, figsize=(14, 14), sharex=True, gridspec_kw={'hspace': 0.2})
     ax2.plot(robot.time, robot.path_x)
@@ -159,5 +160,6 @@ if __name__ == '__main__':
     ax2.set_xlabel('Time')
     ax2.set_title('Position vs. Time (X)')
     ax2.grid()
+    plt.show()
 
 
