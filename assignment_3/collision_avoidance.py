@@ -29,7 +29,7 @@ class DynamicPathPlanning:
         self.obs_v_x = []
         self.obs_v_y = []
 
-        self.radius = 0.3
+        self.radius = 0.15
 
         self.goal = [5, 0]
 
@@ -137,7 +137,7 @@ class DynamicPathPlanning:
         # print(self.deviationCone)
 
     def velocityObstacleCone(self, idxObs):
-        ratio = self.radius/self.computeDistanceTwoPoints(idxObs)
+        ratio = 2*self.radius/self.computeDistanceTwoPoints(idxObs)
         if abs(ratio) > 1:
             ratio = np.sign(ratio)*1
         sweptAngle = np.arcsin(ratio)
